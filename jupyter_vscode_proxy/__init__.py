@@ -46,12 +46,16 @@ def _get_cmd_factory(executable: str) -> Callable:
 
         extensions_dir = os.getenv("CODE_EXTENSIONSDIR", None)
 
+        jupyter_service_prefix=os.getenv("JUPYTERHUB_SERVICE_PREFIX", None)
+
         cmd = get_inner_cmd()
 
         cmd.append("--port=" + str(port))
 
         if extensions_dir:
             cmd += ["--extensions-dir", extensions_dir]
+        if jupyter_service_prefix:
+            cmd += ["--abs-proxy-base-path", f"'{jupyter_service_prefix}'vscode" ]
 
         cmd.append(working_dir)
         return cmd
@@ -61,7 +65,6 @@ def _get_cmd_factory(executable: str) -> Callable:
 
 def setup_vscode() -> Dict[str, Any]:
     executable = os.environ.get("CODE_EXECUTABLE", "code-server")
-    icon = "code-server.svg" if executable == "code-server" else "vscode.svg"
     return {
         "command": _get_cmd_factory(executable),
         "timeout": 300,
@@ -69,7 +72,7 @@ def setup_vscode() -> Dict[str, Any]:
         "launcher_entry": {
             "title": "VS Code",
             "icon_path": os.path.join(
-                os.path.dirname(os.path.abspath(__file__)), "icons", icon
+                os.path.dirname(os.path.abspath(__file__)), "icons", "vscode.svg"
             ),
         },
     }
