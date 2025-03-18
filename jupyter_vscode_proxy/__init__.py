@@ -55,7 +55,7 @@ def _get_cmd_factory(executable: str) -> Callable:
         if extensions_dir:
             cmd += ["--extensions-dir", extensions_dir]
         if jupyter_service_prefix:
-            cmd += ["--abs-proxy-base-path", f"'{jupyter_service_prefix}'vscode" ]
+            cmd += ["--abs-proxy-base-path", f"{jupyter_service_prefix}vscode" ]
 
         cmd.append(working_dir)
         return cmd
