@@ -65,6 +65,10 @@ def _get_cmd_factory(executable: str) -> Callable:
         if extensions_dir:
             cmd += ["--extensions-dir", extensions_dir]
 
+        jupyter_service_prefix=os.getenv("JUPYTERHUB_SERVICE_PREFIX", None)
+        if jupyter_service_prefix:
+            cmd += ["--abs-proxy-base-path", f"{jupyter_service_prefix}vscode" ]
+
         cmd.append(working_dir)
         return cmd
 
@@ -73,7 +77,7 @@ def _get_cmd_factory(executable: str) -> Callable:
 
 def setup_vscode() -> Dict[str, Any]:
     executable = os.environ.get("CODE_EXECUTABLE", "code-server")
-    icon = "code-server.svg" if executable == "code-server" else "vscode.svg"
+    icon = "vscode.svg"
 
     config = {
         "command": _get_cmd_factory(executable),
